@@ -1,36 +1,25 @@
-const refs1 = {
-  days: document.querySelector('#timer-1 [data-value="days"]'),
-  hours: document.querySelector('#timer-1 [data-value="hours"]'),
-  mins: document.querySelector('#timer-1 [data-value="mins"]'),
-  secs: document.querySelector('#timer-1 [data-value="secs"]'),
-};
-
-const refs2 = {
-  days: document.querySelector('#timer-2 [data-value="days"]'),
-  hours: document.querySelector('#timer-2 [data-value="hours"]'),
-  mins: document.querySelector('#timer-2 [data-value="mins"]'),
-  secs: document.querySelector('#timer-2 [data-value="secs"]'),
-};
-
 class CountdownTimer {
-  constructor({ selector, targetDate, onTick }) {
+  constructor({ selector, targetDate }) {
     this.intervalId = null;
     this.selector = selector;
     this.targetDate = targetDate;
-    this.onTick = onTick;
   }
 
   start() {
     this.intervalId = setInterval(() => {
-      const finishTime = this.targetDate;
+      const TARGET_TIME = this.targetDate;
+      const CURRENT_TIME = Date.now();
+      const DELTA_TIME = TARGET_TIME - CURRENT_TIME;
+      const TIME = this.getTimeComponents(DELTA_TIME);
 
-      const currentTime = Date.now();
-      const deltaTime = finishTime - currentTime;
-      const time = this.getTimeComponents(deltaTime);
-      this.onTick(time);
+      this.updateTimerFace(TIME);
 
-      if (finishTime <= currentTime + 1000) {
+      if (TARGET_TIME <= CURRENT_TIME + 1000) {
         clearInterval(this.intervalId);
+
+        const TIME = this.getTimeComponents(0);
+
+        this.updateTimerFace(TIME);
       }
     }, 1000);
   }
@@ -49,33 +38,32 @@ class CountdownTimer {
   pad(value) {
     return String(value).padStart(2, '0');
   }
+
+  updateTimerFace({ days, hours, mins, secs }) {
+    document.querySelector(
+      `${this.selector} [data-value="days"]`,
+    ).textContent = `${days}`;
+    document.querySelector(
+      `${this.selector} [data-value="hours"]`,
+    ).textContent = `${hours}`;
+    document.querySelector(
+      `${this.selector} [data-value="mins"]`,
+    ).textContent = `${mins}`;
+    document.querySelector(
+      `${this.selector} [data-value="secs"]`,
+    ).textContent = `${secs}`;
+  }
 }
 
-function updateTimerFace1({ days, hours, mins, secs }) {
-  refs1.days.textContent = `${days}`;
-  refs1.hours.textContent = `${hours}`;
-  refs1.mins.textContent = `${mins}`;
-  refs1.secs.textContent = `${secs}`;
-}
-
-function updateTimerFace2({ days, hours, mins, secs }) {
-  refs2.days.textContent = `${days}`;
-  refs2.hours.textContent = `${hours}`;
-  refs2.mins.textContent = `${mins}`;
-  refs2.secs.textContent = `${secs}`;
-}
-
-const countdownTimer = new CountdownTimer({
+const countdownTimerOne = new CountdownTimer({
   selector: '#timer-1',
-  targetDate: new Date('Oct 22, 2020 10:48:10'),
-  onTick: updateTimerFace1,
+  targetDate: new Date('Dec 31, 2020 23:59:59'),
 });
 
-const countdownTimer2 = new CountdownTimer({
+const countdownTimerTwo = new CountdownTimer({
   selector: '#timer-2',
-  targetDate: new Date('Oct 22, 2020 01:55:00'),
-  onTick: updateTimerFace2,
+  targetDate: new Date('Feb 14, 2021 23:59:59'),
 });
 
-countdownTimer.start();
-countdownTimer2.start();
+countdownTimerOne.start();
+countdownTimerTwo.start();

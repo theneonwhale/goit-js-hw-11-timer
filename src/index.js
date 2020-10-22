@@ -1,2 +1,2 @@
-import './js/color-switch.js';
+import './sass/timer.scss';
 import './js/countdown-timer.js';
