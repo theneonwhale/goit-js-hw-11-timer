@@ -7,19 +7,19 @@ class CountdownTimer {
 
   start() {
     this.intervalId = setInterval(() => {
-      const TARGET_TIME = this.targetDate;
-      const CURRENT_TIME = Date.now();
-      const DELTA_TIME = TARGET_TIME - CURRENT_TIME;
-      const TIME = this.getTimeComponents(DELTA_TIME);
+      const targetTime = this.targetDate;
+      const currentTime = Date.now();
+      const deltaTime = targetTime - currentTime;
+      const time = this.getTimeComponents(deltaTime);
 
-      this.updateTimerFace(TIME);
+      this.updateTimerFace(time);
 
-      if (TARGET_TIME <= CURRENT_TIME + 1000) {
+      if (targetTime <= currentTime + 1000) {
         clearInterval(this.intervalId);
 
-        const TIME = this.getTimeComponents(0);
+        const time = this.getTimeComponents(0);
 
-        this.updateTimerFace(TIME);
+        this.updateTimerFace(time);
       }
     }, 1000);
   }
