@@ -6,22 +6,28 @@ class CountdownTimer {
   }
 
   start() {
+    this.setTimer();
+
     this.intervalId = setInterval(() => {
-      const targetTime = this.targetDate;
-      const currentTime = Date.now();
-      const deltaTime = targetTime - currentTime;
-      const time = this.getTimeComponents(deltaTime);
+      this.setTimer();
+    }, 1000);
+  }
+
+  setTimer() {
+    const targetTime = this.targetDate;
+    const currentTime = Date.now();
+    const deltaTime = targetTime - currentTime;
+    const time = this.getTimeComponents(deltaTime);
+
+    this.updateTimerFace(time);
+
+    if (targetTime <= currentTime + 1000) {
+      clearInterval(this.intervalId);
+
+      const time = this.getTimeComponents(0);
 
       this.updateTimerFace(time);
-
-      if (targetTime <= currentTime + 1000) {
-        clearInterval(this.intervalId);
-
-        const time = this.getTimeComponents(0);
-
-        this.updateTimerFace(time);
-      }
-    }, 1000);
+    }
   }
 
   getTimeComponents(time) {
